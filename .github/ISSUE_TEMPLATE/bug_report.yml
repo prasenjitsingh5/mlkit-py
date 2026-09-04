@@ -1,0 +1,18 @@
+name: Bug report
+description: Something behaves differently from the documentation
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Include a minimal code sample and the full error.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versions
+      description: mlkit-py, Python, operating system, PyTorch if used.
+    validations:
+      required: true
