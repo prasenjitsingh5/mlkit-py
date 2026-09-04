@@ -27,19 +27,16 @@ With the deep learning extra:
 pip install "mlkit-py[deep] @ git+https://github.com/prasenjitsingh5/mlkit-py.git"
 ```
 
-For local development:
+For local development with [uv](https://docs.astral.sh/uv/):
 
 ```bash
 git clone https://github.com/prasenjitsingh5/mlkit-py.git
 cd mlkit-py
-python -m venv .venv
-.venv\Scripts\activate        # Windows
-# source .venv/bin/activate   # macOS / Linux
-pip install -e ".[deep,dev]"
-pytest
+uv sync --extra dev --extra deep
+uv run pytest
 ```
 
-Requires Python 3.9 or newer. On Windows or CPU-only machines, install PyTorch first from https://pytorch.org/get-started/locally/ so pip picks the right build.
+Requires Python 3.9 or newer. The committed `uv.lock` pins every dependency, and PyTorch resolves from the CPU-only index so installs stay small. Use `uv sync --extra dev` alone to skip PyTorch; the deep learning tests are skipped automatically.
 
 ---
 
@@ -230,9 +227,9 @@ mlkit-py/
 ## Development
 
 ```bash
-pytest                  # run the tests
-ruff check .            # lint
-ruff format .           # format
+uv run pytest           # run the tests
+uv run ruff check .     # lint
+uv run ruff format .    # format
 ```
 
 The deep learning tests are skipped automatically when PyTorch is not installed. CI runs lint and tests on every push. See [CONTRIBUTING.md](CONTRIBUTING.md) and [CHANGELOG.md](CHANGELOG.md).

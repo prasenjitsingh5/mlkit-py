@@ -6,6 +6,9 @@ All notable changes to this project are recorded here. The format follows
 
 ## [Unreleased]
 
+### Changed
+- Dependency management moved to uv with a committed lockfile; CI installs with `uv sync --locked`.
+
 ## [0.1.0] - 2026-09-04
 
 ### Added
