@@ -11,7 +11,7 @@ The module has two layers:
 Example
 -------
 >>> import pandas as pd
->>> from aiml.preprocessing import Preprocessor, clean_dataframe, split_data
+>>> from mlkit.preprocessing import Preprocessor, clean_dataframe, split_data
 >>> df = pd.DataFrame({
 ...     "age": [23, 45, None, 31],
 ...     "city": ["Delhi", "Pune", "Delhi", None],

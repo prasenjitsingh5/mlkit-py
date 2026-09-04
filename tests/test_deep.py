@@ -4,7 +4,7 @@ import pytest
 
 torch = pytest.importorskip("torch")
 
-from aiml.deep import CNNClassifier, MLPClassifier, MLPRegressor, build_cnn, build_mlp  # noqa: E402
+from mlkit.deep import CNNClassifier, MLPClassifier, MLPRegressor, build_cnn, build_mlp  # noqa: E402
 
 
 @pytest.fixture
