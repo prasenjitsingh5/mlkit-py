@@ -1,5 +1,7 @@
 # AIML
 
+[![tests](https://github.com/prasenjitsingh5/aiml/actions/workflows/tests.yml/badge.svg)](https://github.com/prasenjitsingh5/aiml/actions/workflows/tests.yml)
+
 A small, modular Python toolkit for data preprocessing, machine learning and deep learning. It gives you clean, scikit-learn compatible building blocks so you can go from a raw CSV to a trained model in a few lines.
 
 ---
@@ -189,6 +191,8 @@ clf.save("model.pt")
 clf = MLPClassifier.load("model.pt", device="cpu")
 ```
 
+Saved files hold only tensors and plain values and are loaded in PyTorch's safe `weights_only` mode. Only load files you created yourself.
+
 ### Building raw networks
 
 If you want to write your own training loop, the network builders are exposed:
@@ -236,7 +240,7 @@ The deep learning tests are skipped automatically when PyTorch is not installed.
 - Evaluation utilities: confusion matrix plots, regression diagnostics, cross-validation reports.
 - Application templates for NLP and computer vision tasks.
 
-Contributions are welcome. Open an issue to discuss a change before sending a pull request.
+This is a personal project. Issues and pull requests are read but not guaranteed a reply.
 
 ---
 

@@ -273,18 +273,48 @@ class _TorchEstimator(BaseEstimator):
         return torch.cat(outs).numpy()
 
     # ---- persistence -----------------------------------------------------
+    @staticmethod
+    def _pack(value):
+        """Convert fitted attributes to plain Python so files load with ``weights_only=True``."""
+        if isinstance(value, np.ndarray):
+            return {"__ndarray__": value.tolist(), "dtype": str(value.dtype)}
+        if isinstance(value, np.generic):
+            return value.item()
+        if isinstance(value, dict):
+            return {k: _TorchEstimator._pack(v) for k, v in value.items()}
+        if isinstance(value, (list, tuple)):
+            return [_TorchEstimator._pack(v) for v in value]
+        return value
+
+    @staticmethod
+    def _unpack(value):
+        if isinstance(value, dict):
+            if "__ndarray__" in value:
+                return np.asarray(value["__ndarray__"], dtype=value["dtype"])
+            return {k: _TorchEstimator._unpack(v) for k, v in value.items()}
+        if isinstance(value, list):
+            return [_TorchEstimator._unpack(v) for v in value]
+        return value
+
     def save(self, path: str) -> None:
-        """Save hyper-parameters, fitted attributes and weights to ``path``."""
+        """Save hyper-parameters, fitted attributes and weights to ``path``.
+
+        The file contains only tensors and plain Python values, so it can be
+        loaded with ``torch.load(..., weights_only=True)`` and never executes
+        arbitrary code.
+        """
         torch, _ = _torch()
         if not hasattr(self, "network_"):
             raise RuntimeError("cannot save an unfitted model")
         fitted = {
-            k: v for k, v in vars(self).items() if k.endswith("_") and k not in {"network_", "device_"}
+            k: self._pack(v)
+            for k, v in vars(self).items()
+            if k.endswith("_") and k not in {"network_", "device_"}
         }
         torch.save(
             {
                 "class": type(self).__name__,
-                "params": self.get_params(),
+                "params": self._pack(self.get_params()),
                 "fitted": fitted,
                 "state_dict": self.network_.state_dict(),
             },
@@ -293,15 +323,23 @@ class _TorchEstimator(BaseEstimator):
 
     @classmethod
     def load(cls, path: str, *, device: str = "auto"):
-        """Load a model previously written by :meth:`save`."""
+        """Load a model previously written by :meth:`save`.
+
+        Only trust files you created yourself. Loading uses the safe
+        ``weights_only`` mode, so a tampered file fails instead of running code.
+        """
         torch, _ = _torch()
-        payload = torch.load(path, map_location="cpu", weights_only=False)
-        if payload["class"] != cls.__name__:
-            raise TypeError(f"file holds a {payload['class']}, not a {cls.__name__}")
-        model = cls(**payload["params"])
+        payload = torch.load(path, map_location="cpu", weights_only=True)
+        if payload.get("class") != cls.__name__:
+            raise TypeError(f"file holds a {payload.get('class')}, not a {cls.__name__}")
+        params = cls._unpack(payload["params"])
+        for key in ("hidden_sizes", "channels"):
+            if key in params and isinstance(params[key], list):
+                params[key] = tuple(params[key])
+        model = cls(**params)
         model.device = device
         for k, v in payload["fitted"].items():
-            setattr(model, k, v)
+            setattr(model, k, cls._unpack(v))
         model.device_ = _resolve_device(device)
         model.network_ = model._build_network().to(model.device_)
         model.network_.load_state_dict(payload["state_dict"])
