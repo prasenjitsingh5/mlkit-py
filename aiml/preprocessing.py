@@ -26,7 +26,7 @@ True
 
 from __future__ import annotations
 
-from typing import Iterable, Optional, Sequence
+from collections.abc import Iterable, Sequence
 
 import numpy as np
 import pandas as pd
@@ -55,9 +55,9 @@ def clean_dataframe(
     drop_duplicates: bool = True,
     strip_strings: bool = True,
     empty_as_na: bool = True,
-    drop_na_columns_threshold: Optional[float] = None,
+    drop_na_columns_threshold: float | None = None,
     drop_na_rows: bool = False,
-    columns: Optional[Iterable[str]] = None,
+    columns: Iterable[str] | None = None,
 ) -> pd.DataFrame:
     """Return a cleaned copy of ``df``.
 
@@ -114,7 +114,7 @@ def clean_dataframe(
 
 def remove_outliers(
     df: pd.DataFrame,
-    columns: Optional[Sequence[str]] = None,
+    columns: Sequence[str] | None = None,
     *,
     method: str = "iqr",
     factor: float = 1.5,
@@ -175,7 +175,7 @@ def split_data(
     *,
     test_size: float = 0.2,
     stratify: bool = False,
-    random_state: Optional[int] = 42,
+    random_state: int | None = 42,
     shuffle: bool = True,
 ):
     """Split a frame into ``X_train, X_test, y_train, y_test``.
@@ -224,12 +224,12 @@ class Preprocessor(BaseEstimator, TransformerMixin):
 
     def __init__(
         self,
-        numeric_columns: Optional[Sequence[str]] = None,
-        categorical_columns: Optional[Sequence[str]] = None,
+        numeric_columns: Sequence[str] | None = None,
+        categorical_columns: Sequence[str] | None = None,
         *,
-        scaler: Optional[str] = "standard",
+        scaler: str | None = "standard",
         numeric_impute: str = "median",
-        drop_columns: Optional[Sequence[str]] = None,
+        drop_columns: Sequence[str] | None = None,
         return_dataframe: bool = True,
     ):
         self.numeric_columns = numeric_columns

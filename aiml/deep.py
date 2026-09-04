@@ -26,7 +26,7 @@ True
 from __future__ import annotations
 
 import copy
-from typing import Optional, Sequence
+from collections.abc import Sequence
 
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
@@ -139,9 +139,9 @@ class _TorchEstimator(BaseEstimator):
         lr: float = 1e-3,
         weight_decay: float = 0.0,
         validation_fraction: float = 0.0,
-        early_stopping_patience: Optional[int] = None,
+        early_stopping_patience: int | None = None,
         device: str = "auto",
-        random_state: Optional[int] = None,
+        random_state: int | None = None,
         verbose: bool = False,
     ):
         self.epochs = epochs
@@ -192,9 +192,7 @@ class _TorchEstimator(BaseEstimator):
 
         self.network_ = self._build_network().to(self.device_)
         loss_fn = self._loss()
-        optimizer = torch.optim.Adam(
-            self.network_.parameters(), lr=self.lr, weight_decay=self.weight_decay
-        )
+        optimizer = torch.optim.Adam(self.network_.parameters(), lr=self.lr, weight_decay=self.weight_decay)
 
         best_state, best_val, bad_epochs = None, float("inf"), 0
         self.history_ = {"train_loss": [], "val_loss": []}
@@ -402,9 +400,9 @@ class MLPClassifier(_TabularMixin, ClassifierMixin, _TorchEstimator):
         lr: float = 1e-3,
         weight_decay: float = 0.0,
         validation_fraction: float = 0.0,
-        early_stopping_patience: Optional[int] = None,
+        early_stopping_patience: int | None = None,
         device: str = "auto",
-        random_state: Optional[int] = None,
+        random_state: int | None = None,
         verbose: bool = False,
     ):
         super().__init__(
@@ -479,9 +477,9 @@ class MLPRegressor(_TabularMixin, RegressorMixin, _TorchEstimator):
         lr: float = 1e-3,
         weight_decay: float = 0.0,
         validation_fraction: float = 0.0,
-        early_stopping_patience: Optional[int] = None,
+        early_stopping_patience: int | None = None,
         device: str = "auto",
-        random_state: Optional[int] = None,
+        random_state: int | None = None,
         verbose: bool = False,
     ):
         super().__init__(
@@ -561,9 +559,9 @@ class CNNClassifier(ClassifierMixin, _TorchEstimator):
         lr: float = 1e-3,
         weight_decay: float = 0.0,
         validation_fraction: float = 0.0,
-        early_stopping_patience: Optional[int] = None,
+        early_stopping_patience: int | None = None,
         device: str = "auto",
-        random_state: Optional[int] = None,
+        random_state: int | None = None,
         verbose: bool = False,
     ):
         super().__init__(
