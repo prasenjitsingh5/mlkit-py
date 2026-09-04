@@ -36,4 +36,4 @@ jobs:
           pip install torch --index-url https://download.pytorch.org/whl/cpu
           pip install -e ".[dev]"
       - name: Test
-        run: pytest -q --doctest-modules aiml tests
+        run: pytest -q --doctest-modules mlkit tests

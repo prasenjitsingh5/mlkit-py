@@ -9,9 +9,10 @@ All notable changes to this project are recorded here. The format follows
 ## [0.1.0] - 2026-09-04
 
 ### Added
-- `aiml.preprocessing`: `clean_dataframe`, `remove_outliers`, `split_features_target`,
+- `mlkit.preprocessing`: `clean_dataframe`, `remove_outliers`, `split_features_target`,
   `split_data`, and the scikit-learn compatible `Preprocessor` transformer.
-- `aiml.deep`: `MLPClassifier`, `MLPRegressor`, `CNNClassifier` with early stopping,
+- `mlkit.deep`: `MLPClassifier`, `MLPRegressor`, `CNNClassifier` with early stopping,
   device auto-detection and safe save / load; `build_mlp` and `build_cnn` builders.
+- Worked example on the breast cancer dataset in `examples/`.
 - Test suite, GitHub Actions CI (lint and tests on Python 3.10 and 3.12), MIT license,
   security policy.

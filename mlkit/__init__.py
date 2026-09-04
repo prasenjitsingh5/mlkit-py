@@ -1,6 +1,6 @@
-"""AIML: a small, modular toolkit for data preprocessing, machine learning and deep learning."""
+"""mlkit: a small, modular toolkit for data preprocessing, machine learning and deep learning."""
 
-from aiml.preprocessing import (
+from mlkit.preprocessing import (
     Preprocessor,
     clean_dataframe,
     remove_outliers,
@@ -12,12 +12,12 @@ __version__ = "0.1.0"
 
 
 def __getattr__(name):
-    # Lazy access to the optional deep learning models, e.g. ``aiml.MLPClassifier``.
+    # Lazy access to the optional deep learning models, e.g. ``mlkit.MLPClassifier``.
     if name in {"MLPClassifier", "MLPRegressor", "CNNClassifier"}:
-        from aiml import deep
+        from mlkit import deep
 
         return getattr(deep, name)
-    raise AttributeError(f"module 'aiml' has no attribute {name!r}")
+    raise AttributeError(f"module 'mlkit' has no attribute {name!r}")
 
 
 __all__ = [

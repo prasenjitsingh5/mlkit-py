@@ -6,7 +6,7 @@ Three estimators are provided, all built on PyTorch:
 * :class:`MLPRegressor` for tabular regression (single or multi-output).
 * :class:`CNNClassifier` for image classification on ``(N, C, H, W)`` arrays.
 
-PyTorch is an optional dependency. Install it with ``pip install aiml[deep]``.
+PyTorch is an optional dependency. Install it with ``pip install mlkit-py[deep]``.
 Everything in this module accepts NumPy arrays, pandas objects or torch
 tensors, trains on CPU by default and picks a GPU automatically when one is
 available (``device="auto"``).
@@ -14,7 +14,7 @@ available (``device="auto"``).
 Example
 -------
 >>> import numpy as np
->>> from aiml.deep import MLPClassifier
+>>> from mlkit.deep import MLPClassifier
 >>> rng = np.random.default_rng(0)
 >>> X = rng.normal(size=(200, 4))
 >>> y = (X[:, 0] + X[:, 1] > 0).astype(int)
@@ -43,7 +43,7 @@ def _torch():
         import torch.nn as nn  # noqa: WPS433
     except ImportError as exc:  # pragma: no cover - exercised only without torch
         raise ImportError(
-            "PyTorch is required for aiml.deep. Install it with `pip install aiml[deep]` "
+            "PyTorch is required for mlkit.deep. Install it with `pip install mlkit-py[deep]` "
             "or follow https://pytorch.org/get-started/locally/."
         ) from exc
     return torch, nn

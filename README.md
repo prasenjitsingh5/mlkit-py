@@ -1,6 +1,6 @@
-# AIML
+# mlkit-py
 
-[![tests](https://github.com/prasenjitsingh5/aiml/actions/workflows/tests.yml/badge.svg)](https://github.com/prasenjitsingh5/aiml/actions/workflows/tests.yml)
+[![tests](https://github.com/prasenjitsingh5/mlkit-py/actions/workflows/tests.yml/badge.svg)](https://github.com/prasenjitsingh5/mlkit-py/actions/workflows/tests.yml)
 
 A small, modular Python toolkit for data preprocessing, machine learning and deep learning. It gives you clean, scikit-learn compatible building blocks so you can go from a raw CSV to a trained model in a few lines.
 
@@ -11,27 +11,27 @@ A small, modular Python toolkit for data preprocessing, machine learning and dee
 - **Data preprocessing**: clean frames, drop outliers, split data, and a `Preprocessor` transformer that imputes, scales and one-hot encodes mixed numeric and categorical columns.
 - **Deep learning models**: `MLPClassifier`, `MLPRegressor` and `CNNClassifier` built on PyTorch with a `fit` / `predict` API, early stopping, GPU auto-detection and save / load.
 - **Works with scikit-learn**: every estimator drops into a `Pipeline`, `GridSearchCV` or `cross_val_score`.
-- **Optional heavy dependencies**: PyTorch is only needed for `aiml.deep`.
+- **Optional heavy dependencies**: PyTorch is only needed for `mlkit.deep`.
 
 ---
 
 ## Installation
 
 ```bash
-pip install git+https://github.com/prasenjitsingh5/aiml.git
+pip install git+https://github.com/prasenjitsingh5/mlkit-py.git
 ```
 
 With the deep learning extra:
 
 ```bash
-pip install "aiml[deep] @ git+https://github.com/prasenjitsingh5/aiml.git"
+pip install "mlkit-py[deep] @ git+https://github.com/prasenjitsingh5/mlkit-py.git"
 ```
 
 For local development:
 
 ```bash
-git clone https://github.com/prasenjitsingh5/aiml.git
-cd aiml
+git clone https://github.com/prasenjitsingh5/mlkit-py.git
+cd mlkit-py
 python -m venv .venv
 .venv\Scripts\activate        # Windows
 # source .venv/bin/activate   # macOS / Linux
@@ -45,10 +45,12 @@ Requires Python 3.9 or newer. On Windows or CPU-only machines, install PyTorch f
 
 ## Quick start
 
+A runnable version of this on a public dataset is in [examples/tabular_classification.py](examples/tabular_classification.py).
+
 ```python
 import pandas as pd
-from aiml import Preprocessor, clean_dataframe, remove_outliers, split_data
-from aiml.deep import MLPClassifier
+from mlkit import Preprocessor, clean_dataframe, remove_outliers, split_data
+from mlkit.deep import MLPClassifier
 
 df = pd.read_csv("customers.csv")
 
@@ -79,7 +81,7 @@ print("accuracy:", clf.score(X_test_p, y_test))
 ### Cleaning a DataFrame
 
 ```python
-from aiml import clean_dataframe
+from mlkit import clean_dataframe
 
 df = clean_dataframe(
     raw,
@@ -96,7 +98,7 @@ df = clean_dataframe(
 ### Removing outliers
 
 ```python
-from aiml import remove_outliers
+from mlkit import remove_outliers
 
 # Inter-quartile rule, 1.5 * IQR (default)
 tidy = remove_outliers(df, ["price", "quantity"])
@@ -110,7 +112,7 @@ Rows with a missing value in the checked column are kept so the imputer can hand
 ### Preprocessor
 
 ```python
-from aiml import Preprocessor
+from mlkit import Preprocessor
 
 prep = Preprocessor(
     scaler="minmax",  # "standard" (default), "minmax" or None
@@ -139,7 +141,7 @@ model.score(X_test, y_test)
 ### MLPClassifier and MLPRegressor
 
 ```python
-from aiml.deep import MLPClassifier, MLPRegressor
+from mlkit.deep import MLPClassifier, MLPRegressor
 
 clf = MLPClassifier(
     hidden_sizes=(128, 64),
@@ -171,7 +173,7 @@ Targets for `MLPRegressor` are standardised internally, so large offsets (for ex
 
 ```python
 import numpy as np
-from aiml.deep import CNNClassifier
+from mlkit.deep import CNNClassifier
 
 # images: (N, C, H, W) float array scaled to [0, 1]; (N, H, W) is treated as one channel
 images = np.load("digits.npy") / 255.0
@@ -198,7 +200,7 @@ Saved files hold only tensors and plain values and are loaded in PyTorch's safe 
 If you want to write your own training loop, the network builders are exposed:
 
 ```python
-from aiml.deep import build_mlp, build_cnn
+from mlkit.deep import build_mlp, build_cnn
 
 net = build_mlp(in_features=20, out_features=3, hidden_sizes=(64, 64), dropout=0.1)
 cnn = build_cnn(in_channels=3, num_classes=10, channels=(32, 64))
@@ -209,11 +211,13 @@ cnn = build_cnn(in_channels=3, num_classes=10, channels=(32, 64))
 ## Project structure
 
 ```
-aiml/
-├── aiml/
+mlkit-py/
+├── mlkit/
 │   ├── __init__.py        # public API
 │   ├── preprocessing.py   # cleaning, outliers, splitting, Preprocessor
 │   └── deep.py            # MLPClassifier, MLPRegressor, CNNClassifier
+├── examples/
+│   └── tabular_classification.py
 ├── tests/
 │   ├── test_preprocessing.py
 │   └── test_deep.py

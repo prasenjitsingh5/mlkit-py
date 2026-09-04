@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from aiml.preprocessing import (
+from mlkit.preprocessing import (
     Preprocessor,
     clean_dataframe,
     remove_outliers,
