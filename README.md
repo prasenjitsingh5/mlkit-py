@@ -83,11 +83,11 @@ from aiml import clean_dataframe
 
 df = clean_dataframe(
     raw,
-    drop_duplicates=True,            # exact duplicate rows
-    strip_strings=True,              # "  Delhi " -> "Delhi"
-    empty_as_na=True,                # "" -> NaN
-    drop_na_columns_threshold=0.6,   # drop columns that are >60% missing
-    drop_na_rows=False,              # keep rows with NaN for the imputer
+    drop_duplicates=True,  # exact duplicate rows
+    strip_strings=True,  # "  Delhi " -> "Delhi"
+    empty_as_na=True,  # "" -> NaN
+    drop_na_columns_threshold=0.6,  # drop columns that are >60% missing
+    drop_na_rows=False,  # keep rows with NaN for the imputer
 )
 ```
 
@@ -113,14 +113,14 @@ Rows with a missing value in the checked column are kept so the imputer can hand
 from aiml import Preprocessor
 
 prep = Preprocessor(
-    scaler="minmax",              # "standard" (default), "minmax" or None
-    numeric_impute="mean",        # "median" (default), "mean" or "most_frequent"
-    drop_columns=["customer_id"], # ignore ids and leakage columns
-    return_dataframe=True,        # DataFrame with readable names, or NumPy array
+    scaler="minmax",  # "standard" (default), "minmax" or None
+    numeric_impute="mean",  # "median" (default), "mean" or "most_frequent"
+    drop_columns=["customer_id"],  # ignore ids and leakage columns
+    return_dataframe=True,  # DataFrame with readable names, or NumPy array
 )
 prep.fit(X_train)
 prep.transform(X_test)
-prep.get_feature_names_out()      # ['age', 'income', 'city=Delhi', 'city=Pune', ...]
+prep.get_feature_names_out()  # ['age', 'income', 'city=Delhi', 'city=Pune', ...]
 ```
 
 Column types are inferred from dtypes. Pass `numeric_columns=[...]` and `categorical_columns=[...]` to override. Categories unseen during `fit` become all-zero columns, so the output width never changes.
@@ -144,24 +144,24 @@ from aiml.deep import MLPClassifier, MLPRegressor
 clf = MLPClassifier(
     hidden_sizes=(128, 64),
     dropout=0.2,
-    activation="relu",            # "relu", "tanh", "gelu" or "sigmoid"
+    activation="relu",  # "relu", "tanh", "gelu" or "sigmoid"
     epochs=100,
     batch_size=64,
     lr=1e-3,
     weight_decay=1e-4,
-    validation_fraction=0.2,      # hold out 20% for early stopping
-    early_stopping_patience=5,    # stop after 5 epochs without improvement
-    device="auto",                # "auto", "cpu" or "cuda"
+    validation_fraction=0.2,  # hold out 20% for early stopping
+    early_stopping_patience=5,  # stop after 5 epochs without improvement
+    device="auto",  # "auto", "cpu" or "cuda"
     random_state=42,
     verbose=True,
 )
-clf.fit(X_train, y_train)          # labels can be strings or ints
-clf.predict(X_test)                # original labels
-clf.predict_proba(X_test)          # shape (n_samples, n_classes)
-clf.history_["val_loss"]           # per-epoch losses
+clf.fit(X_train, y_train)  # labels can be strings or ints
+clf.predict(X_test)  # original labels
+clf.predict_proba(X_test)  # shape (n_samples, n_classes)
+clf.history_["val_loss"]  # per-epoch losses
 
 reg = MLPRegressor(hidden_sizes=(64,), epochs=80, random_state=0)
-reg.fit(X_train, y_train)          # 1-d or 2-d targets
+reg.fit(X_train, y_train)  # 1-d or 2-d targets
 reg.predict(X_test)
 ```
 
@@ -223,13 +223,15 @@ aiml/
 
 ---
 
-## Running the tests
+## Development
 
 ```bash
-pytest
+pytest                  # run the tests
+ruff check .            # lint
+ruff format .           # format
 ```
 
-The deep learning tests are skipped automatically when PyTorch is not installed.
+The deep learning tests are skipped automatically when PyTorch is not installed. CI runs lint and tests on every push. See [CONTRIBUTING.md](CONTRIBUTING.md) and [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
