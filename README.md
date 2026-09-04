@@ -36,7 +36,7 @@ uv sync --extra dev --extra deep
 uv run pytest
 ```
 
-Requires Python 3.9 or newer. The committed `uv.lock` pins every dependency, and PyTorch resolves from the CPU-only index so installs stay small. Use `uv sync --extra dev` alone to skip PyTorch; the deep learning tests are skipped automatically.
+Requires Python 3.10 or newer. The committed `uv.lock` pins every dependency, and PyTorch resolves from the CPU-only index so installs stay small. Use `uv sync --extra dev` alone to skip PyTorch; the deep learning tests are skipped automatically.
 
 ---
 
