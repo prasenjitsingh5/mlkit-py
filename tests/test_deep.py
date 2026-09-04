@@ -96,8 +96,32 @@ def test_mlp_classifier_save_and_load(tmp_path, clf_data):
     clf.save(str(path))
     loaded = MLPClassifier.load(str(path), device="cpu")
     assert np.array_equal(loaded.predict(X), clf.predict(X))
+    assert loaded.hidden_sizes == (8,)
+    assert list(loaded.classes_) == ["no", "yes"]
     with pytest.raises(TypeError):
         MLPRegressor.load(str(path))
+
+
+def test_saved_file_loads_in_safe_mode(tmp_path, reg_data):
+    X, y = reg_data
+    reg = MLPRegressor(hidden_sizes=(4,), epochs=2, random_state=0).fit(X, y)
+    path = tmp_path / "reg.pt"
+    reg.save(str(path))
+    payload = torch.load(str(path), map_location="cpu", weights_only=True)
+    assert payload["class"] == "MLPRegressor"
+    loaded = MLPRegressor.load(str(path), device="cpu")
+    assert np.allclose(loaded.predict(X), reg.predict(X))
+
+
+def test_cnn_save_and_load(tmp_path):
+    X = np.zeros((8, 1, 8, 8), dtype=np.float32)
+    X[4:, :, 2:6, 2:6] = 1.0
+    y = [0] * 4 + [1] * 4
+    cnn = CNNClassifier(channels=(4,), epochs=2, batch_size=4, random_state=0).fit(X, y)
+    path = tmp_path / "cnn.pt"
+    cnn.save(str(path))
+    loaded = CNNClassifier.load(str(path), device="cpu")
+    assert np.array_equal(loaded.predict(X), cnn.predict(X))
 
 
 # ----------------------------------------------------------------- MLPRegressor
