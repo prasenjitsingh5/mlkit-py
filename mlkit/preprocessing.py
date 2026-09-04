@@ -339,6 +339,6 @@ class Preprocessor(BaseEstimator, TransformerMixin):
         names: list[str] = list(self.numeric_columns_)
         if self.categorical_columns_:
             onehot = self.column_transformer_.named_transformers_["cat"].named_steps["onehot"]
-            for col, cats in zip(self.categorical_columns_, onehot.categories_):
+            for col, cats in zip(self.categorical_columns_, onehot.categories_, strict=True):
                 names.extend(f"{col}={cat}" for cat in cats)
         return names
