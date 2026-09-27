@@ -6,6 +6,8 @@ All notable changes to this project are recorded here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-27
+
 ### Changed
 - Minimum Python is now 3.10, which lets the lockfile move past a filelock advisory affecting the 3.9 resolution.
 - Repository hardening: actions pinned to commit SHAs, Dependabot, CODEOWNERS, code of conduct, issue and pull request templates, disclaimer.
